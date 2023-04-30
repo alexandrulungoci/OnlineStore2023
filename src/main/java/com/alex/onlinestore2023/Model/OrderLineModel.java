@@ -10,4 +10,6 @@ public class OrderLineModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    private double price;
+
 }
