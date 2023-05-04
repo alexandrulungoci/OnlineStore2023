@@ -1,17 +1,7 @@
-package com.alex.onlinestore2023.Model;
+package com.alex.onlinestore2023.dto;
 
-import org.hibernate.annotations.Cascade;
+public class CategoryDto {
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-
-@Entity
-@Table(name = "category")
-public class CategoryModel {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private String categoryName;
@@ -31,5 +21,4 @@ public class CategoryModel {
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
     }
-
 }
