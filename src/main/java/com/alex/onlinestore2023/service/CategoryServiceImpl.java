@@ -1,6 +1,7 @@
 package com.alex.onlinestore2023.service;
 
 import com.alex.onlinestore2023.Model.CategoryModel;
+
 import com.alex.onlinestore2023.dto.CategoryDto;
 import com.alex.onlinestore2023.repository.CategoryRepository;
 import com.alex.onlinestore2023.repository.ProductRepository;
@@ -20,6 +21,7 @@ public class CategoryServiceImpl implements CategoryService{
     @Autowired
     private ProductRepository productRepository;
 
+
     @Override
     public void addCategory(CategoryDto categoryDto) {
         CategoryModel categoryModel = new CategoryModel();
@@ -28,8 +30,9 @@ public class CategoryServiceImpl implements CategoryService{
         categoryRepository.save(categoryModel);
     }
 
+
     @Override
-    public CategoryDto getCategory(Long id) {
+    public com.alex.onlinestore2023.dto.CategoryDto getCategory(Long id) {
         Optional<CategoryModel> categoryModelOptional = categoryRepository.findById(id);
         if (categoryModelOptional.isPresent()){
             CategoryModel categoryModel = categoryModelOptional.get();
@@ -58,7 +61,12 @@ public class CategoryServiceImpl implements CategoryService{
 
     @Override
     public void updateCategory(CategoryDto categoryDto) {
-
+        Optional<CategoryModel> categoryModelOptional = categoryRepository.findById(categoryDto.getId());
+        if (categoryModelOptional.isPresent()){
+            CategoryModel categoryModel = categoryModelOptional.get();
+            categoryModel.setCategoryName(categoryDto.getCategoryName());
+            categoryRepository.save(categoryModel);
+        }
     }
 
     @Override

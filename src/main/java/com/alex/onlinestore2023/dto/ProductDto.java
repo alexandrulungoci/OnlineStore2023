@@ -1,8 +1,6 @@
 package com.alex.onlinestore2023.dto;
 
-import com.alex.onlinestore2023.Model.CategoryModel;
 
-import javax.persistence.ManyToOne;
 
 public class ProductDto {
 
@@ -10,7 +8,7 @@ public class ProductDto {
 
     private String productName;
 
-    private CategoryModel category;
+    private CategoryDto category;
 
     private double price;
 
@@ -30,11 +28,11 @@ public class ProductDto {
         this.productName = productName;
     }
 
-    public CategoryModel getCategory() {
+    public CategoryDto getCategory() {
         return category;
     }
 
-    public void setCategory(CategoryModel category) {
+    public void setCategory(CategoryDto category) {
         this.category = category;
     }
 
