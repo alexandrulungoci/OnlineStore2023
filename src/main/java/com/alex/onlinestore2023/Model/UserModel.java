@@ -18,8 +18,8 @@ public class UserModel {
     @Enumerated(EnumType.STRING)
     private RoleModel roleModel;
 
-//    @OneToOne(cascade = CascadeType.ALL)
-//    private CartModel cartModel;
+    @OneToOne(cascade = CascadeType.ALL)
+    private CartModel cartModel;
 
     public long getId() {
         return id;
@@ -53,11 +53,11 @@ public class UserModel {
         this.roleModel = roleModel;
     }
 
-//    public CartModel getCartModel() {
-//        return cartModel;
-//    }
-//
-//    public void setCartModel(CartModel cartModel) {
-//        this.cartModel = cartModel;
-//    }
+    public CartModel getCartModel() {
+        return cartModel;
+    }
+
+    public void setCartModel(CartModel cartModel) {
+        this.cartModel = cartModel;
+    }
 }
