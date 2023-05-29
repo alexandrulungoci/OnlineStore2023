@@ -1,6 +1,8 @@
 package com.alex.onlinestore2023.Model;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -20,8 +22,8 @@ public class OrderModel {
     @ManyToOne(cascade = CascadeType.ALL)
     private UserModel userModel;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date orderDate;
+   // @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime orderDate;
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<OrderLineModel> orderLineModelList = new ArrayList<>();
@@ -59,11 +61,11 @@ public class OrderModel {
         this.userModel = userModel;
     }
 
-    public Date getOrderDate() {
+    public LocalDateTime getOrderDate() {
         return orderDate;
     }
 
-    public void setOrderDate(Date orderDate) {
+    public void setOrderDate(LocalDateTime orderDate) {
         this.orderDate = orderDate;
     }
 

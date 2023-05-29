@@ -10,7 +10,7 @@ public class CartDto {
 
     private List<OrderLineDto> orderLineDtoList;
 
-//    private UserDto user;
+    private UserDto user;
 
     private double totalCartCost;
 
@@ -36,5 +36,13 @@ public class CartDto {
 
     public void setTotalCartCost(double totalCartCost) {
         this.totalCartCost = totalCartCost;
+    }
+
+    public UserDto getUser() {
+        return user;
+    }
+
+    public void setUser(UserDto user) {
+        this.user = user;
     }
 }

@@ -1,15 +1,8 @@
 package com.alex.onlinestore2023.service;
 
-import com.alex.onlinestore2023.Model.CartModel;
-import com.alex.onlinestore2023.Model.OrderLineModel;
-import com.alex.onlinestore2023.Model.ProductModel;
-import com.alex.onlinestore2023.Model.UserModel;
-import com.alex.onlinestore2023.dto.CartDto;
-import com.alex.onlinestore2023.dto.OrderLineDto;
-import com.alex.onlinestore2023.dto.ProductDto;
-import com.alex.onlinestore2023.repository.CartRepository;
-import com.alex.onlinestore2023.repository.ProductRepository;
-import com.alex.onlinestore2023.repository.UserRepository;
+import com.alex.onlinestore2023.Model.*;
+import com.alex.onlinestore2023.dto.*;
+import com.alex.onlinestore2023.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +22,13 @@ public class CartServiceImpl implements CartService{
 
     @Autowired
     CartRepository cartRepository;
+
+    @Autowired
+    private OrderLineRepository orderLineRepository;
+
+    @Autowired
+    private UserAddressRepository userAddressRepository;
+
 
     private double totalCartCost = 0.0;
 
@@ -70,6 +70,7 @@ public class CartServiceImpl implements CartService{
 
     }
 
+
     @Override
     public CartDto findByUserModel_Id(Long id) {
         CartDto cartDto = new CartDto();
@@ -89,6 +90,11 @@ public class CartServiceImpl implements CartService{
             productDto.setProductName(productModel.getProductName());
             productDto.setPrice(productModel.getPrice());
 
+            CategoryDto categoryDto = new CategoryDto();
+            categoryDto.setId(productModel.getCategory().getId());
+            categoryDto.setCategoryName(productModel.getCategory().getCategoryName());
+            productDto.setCategory(categoryDto);
+
             orderLineDto.setId(orderLineModel.getId());
             orderLineDto.setProduct(productDto);
             orderLineDto.setQuantity(orderLineModel.getQuantity());
@@ -102,7 +108,53 @@ public class CartServiceImpl implements CartService{
         cartDto.setOrderLineDtoList(orderLineDtoList);
         cartDto.setTotalCartCost(cartModel.getTotalCartCost());
 
+        UserDto userDto = new UserDto();
+        Optional<UserModel> userModelOptional = userRepository.findById(id);
+        if (userModelOptional.isPresent()) {
+            UserModel userModel = userModelOptional.get();
+
+            userDto.setUserName(userModel.getUserName());
+            userDto.setId(userModel.getId());
+            userDto.setRoleModel(userModel.getRoleModel());
+
+            UserAddressDto userAddressDto = new UserAddressDto();
+            long addressId = userModel.getUserAddress().getId();
+            Optional<UserAddressModel> userAddressModelOptional = userAddressRepository.findById(addressId);
+            if (userAddressModelOptional.isPresent()){
+                UserAddressModel userAddressModel = userAddressModelOptional.get();
+                userAddressDto.setId(userAddressModel.getId());
+                userAddressDto.setCountry(userAddressModel.getCountry());
+                userAddressDto.setCity(userAddressModel.getCity());
+                userAddressDto.setStreet(userAddressModel.getStreet());
+                userAddressDto.setStreetNumber(userAddressModel.getStreetNumber());
+                userAddressDto.setZipcode(userAddressModel.getZipcode());
+
+            }
+            userDto.setUserAddress(userAddressDto);
+            cartDto.setUser(userDto);
+        }
 
         return cartDto;
+    }
+
+
+
+    @Override
+    public void deleteOrderLineFromCart(Long userId, Long orderLineId) {
+        CartModel cartModel = cartRepository.findByUserModel_Id(userId);
+        List<OrderLineModel> orderLineModelList = cartModel.getOrderLineModelList();
+        Optional<OrderLineModel> orderLineModelOptional = orderLineRepository.findById(orderLineId);
+        if (orderLineModelOptional.isPresent()){
+            OrderLineModel orderLineModel = orderLineModelOptional.get();
+            orderLineModelList.remove(orderLineModel);
+        }
+        cartModel.setOrderLineModelList(orderLineModelList);
+        double totalCost = 0.0;
+        for(OrderLineModel orderLineModel: orderLineModelList){
+            totalCost += orderLineModel.getLinePrice();
+        }
+        cartModel.setTotalCartCost(totalCost);
+        cartRepository.save(cartModel);
+
     }
 }

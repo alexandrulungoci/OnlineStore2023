@@ -14,8 +14,8 @@ public class CartModel {
     @OneToMany(cascade = CascadeType.ALL)
     private List<OrderLineModel> orderLineModelList = new ArrayList<>();
 
-//    @OneToOne
-//    private UserModel userModel;
+    @OneToOne(mappedBy = "cartModel")
+    private UserModel userModel;
 
     private double totalCartCost;
 
@@ -28,13 +28,13 @@ public class CartModel {
     }
 
 
-//    public UserModel getUserModel() {
-//        return userModel;
-//    }
-//
-//    public void setUserModel(UserModel userModel) {
-//        this.userModel = userModel;
-//    }
+    public UserModel getUserModel() {
+        return userModel;
+    }
+
+    public void setUserModel(UserModel userModel) {
+        this.userModel = userModel;
+    }
 
     public double getTotalCartCost() {
         return totalCartCost;
