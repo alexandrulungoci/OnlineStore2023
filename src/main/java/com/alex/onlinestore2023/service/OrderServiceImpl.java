@@ -1,9 +1,9 @@
 package com.alex.onlinestore2023.service;
 
-import com.alex.onlinestore2023.Model.CartModel;
-import com.alex.onlinestore2023.Model.OrderLineModel;
-import com.alex.onlinestore2023.Model.OrderModel;
-import com.alex.onlinestore2023.Model.UserModel;
+import com.alex.onlinestore2023.Model.*;
+import com.alex.onlinestore2023.dto.OrderDto;
+import com.alex.onlinestore2023.dto.UserAddressDto;
+import com.alex.onlinestore2023.dto.UserDto;
 import com.alex.onlinestore2023.repository.CartRepository;
 import com.alex.onlinestore2023.repository.OrderRepository;
 import com.alex.onlinestore2023.repository.UserRepository;
@@ -15,6 +15,7 @@ import javax.persistence.TemporalType;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.Temporal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -54,5 +55,45 @@ public class OrderServiceImpl implements OrderService{
         orderRepository.save(orderModel);
 
 
+    }
+
+    @Override
+    public List<OrderDto> getOrdersByUserId(Long userId) {
+
+        List<OrderModel> orderModelList = orderRepository.findByUserModel_Id(userId);
+        List<OrderDto> orderDtoList = new ArrayList<>();
+
+        for (OrderModel orderModel : orderModelList) {
+            OrderDto orderDto = new OrderDto();
+            orderDto.setId(orderModel.getId());
+            orderDto.setTotalCost(orderModel.getTotalCost());
+            orderDto.setUserName(orderModel.getUserName());
+
+            UserDto userDto = new UserDto();
+            Optional<UserModel> userModelOptional = userRepository.findById(userId);
+            if (userModelOptional.isPresent()) {
+                UserModel userModel = userModelOptional.get();
+                userDto.setId(userModel.getId());
+                userDto.setUserName(userModel.getUserName());
+
+                UserAddressModel userAddressModel = userModel.getUserAddress();
+                if (userAddressModel != null) {
+                    UserAddressDto userAddressDto = new UserAddressDto();
+                    userAddressDto.setId(userAddressModel.getId());
+                    userAddressDto.setCountry(userAddressModel.getCountry());
+                    userAddressDto.setCity(userAddressModel.getCity());
+                    userAddressDto.setStreet(userAddressModel.getStreet());
+                    userAddressDto.setStreetNumber(userAddressModel.getStreetNumber());
+                    userAddressDto.setZipcode(userAddressModel.getZipcode());
+                    userDto.setUserAddress(userAddressDto);
+                }
+                userDto.setRoleModel(userModel.getRoleModel());
+
+                orderDto.setUser(userDto);
+                orderDtoList.add(orderDto);
+            }
+            return orderDtoList;
+        }
+        return null;
     }
 }
