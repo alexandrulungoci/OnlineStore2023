@@ -1,19 +1,14 @@
-package com.alex.onlinestore2023.Model;
+package com.alex.onlinestore2023.dto;
 
-import javax.persistence.*;
 
-@Entity
-@Table(name = "products")
-public class ProductModel {
 
-    @Id
-    @GeneratedValue(strategy =  GenerationType.IDENTITY)
+public class ProductDto {
+
     private long id;
 
     private String productName;
 
-    @ManyToOne
-    private CategoryModel category;
+    private CategoryDto category;
 
     private double price;
 
@@ -33,11 +28,11 @@ public class ProductModel {
         this.productName = productName;
     }
 
-    public CategoryModel getCategory() {
+    public CategoryDto getCategory() {
         return category;
     }
 
-    public void setCategory(CategoryModel category) {
+    public void setCategory(CategoryDto category) {
         this.category = category;
     }
 
