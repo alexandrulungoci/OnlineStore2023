@@ -38,6 +38,7 @@ public class ProductServiceImpl implements ProductService{
 
         productModel.setProductName(productDto.getProductName());
         productModel.setPrice(productDto.getPrice());
+      //  productModel.setThumbnail(productDto.getThumbnail());
         productRepository.save(productModel);
     }
 
@@ -51,6 +52,7 @@ public class ProductServiceImpl implements ProductService{
             productDto.setId(productModel.getId());
             productDto.setProductName(productModel.getProductName());
             productDto.setPrice(productModel.getPrice());
+     //       productDto.setThumbnail(productModel.getThumbnail());
 
             CategoryModel categoryModel = productModel.getCategory();
             CategoryDto categoryDto = new CategoryDto();
@@ -75,6 +77,7 @@ public class ProductServiceImpl implements ProductService{
             productDto.setId(productModel.getId());
             productDto.setProductName(productModel.getProductName());
             productDto.setPrice(productModel.getPrice());
+       //     productDto.setThumbnail(productModel.getThumbnail());
                 CategoryDto categoryDto = new CategoryDto();
                 categoryDto.setId(productModel.getCategory().getId());
                 categoryDto.setCategoryName(productModel.getCategory().getCategoryName());
@@ -83,6 +86,33 @@ public class ProductServiceImpl implements ProductService{
         }
 
         return productDtoList;
+    }
+
+    @Override
+    public List<ProductDto> getProductsByCategory(Long id) {
+        List<ProductDto> productDtoList = new ArrayList<>();
+        Optional<CategoryModel> categoryModelOptional = categoryRepository.findById(id);
+        if (categoryModelOptional.isPresent()) {
+            CategoryModel categoryModelFound = categoryModelOptional.get();
+
+
+
+        List<ProductModel> productModelList = productRepository.findByCategory(categoryModelFound);
+
+        for(ProductModel productModel : productModelList){
+            ProductDto productDto = new ProductDto();
+            productDto.setId(productModel.getId());
+            productDto.setProductName(productModel.getProductName());
+            productDto.setPrice(productModel.getPrice());
+      //      productDto.setThumbnail(productModel.getThumbnail());
+            CategoryDto categoryDto = new CategoryDto();
+            categoryDto.setId(categoryModelFound.getId());
+            categoryDto.setCategoryName(categoryModelFound.getCategoryName());
+            productDto.setCategory(categoryDto);
+            productDtoList.add(productDto);
+        }
+    }
+       return productDtoList;
     }
 
     @Override
@@ -100,6 +130,7 @@ public class ProductServiceImpl implements ProductService{
             }
             productModel.setProductName(productDto.getProductName());
             productModel.setPrice(productDto.getPrice());
+     //       productModel.setThumbnail(productDto.getThumbnail());
 
             productRepository.save(productModel);
         }

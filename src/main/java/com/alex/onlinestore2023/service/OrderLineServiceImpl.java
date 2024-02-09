@@ -2,9 +2,13 @@ package com.alex.onlinestore2023.service;
 
 import com.alex.onlinestore2023.Model.CartModel;
 import com.alex.onlinestore2023.Model.OrderLineModel;
+import com.alex.onlinestore2023.Model.ProductModel;
+import com.alex.onlinestore2023.dto.CategoryDto;
 import com.alex.onlinestore2023.dto.OrderLineDto;
+import com.alex.onlinestore2023.dto.ProductDto;
 import com.alex.onlinestore2023.repository.CartRepository;
 import com.alex.onlinestore2023.repository.OrderLineRepository;
+import com.alex.onlinestore2023.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +25,9 @@ public class OrderLineServiceImpl implements OrderLineService{
 
     @Autowired
     CartRepository cartRepository;
+
+    @Autowired
+    ProductRepository productRepository;
 
     @Override
     public void updateOrderLine(OrderLineDto orderLineDto, Long userId) {
@@ -47,5 +54,30 @@ public class OrderLineServiceImpl implements OrderLineService{
             orderLineRepository.delete(orderLineModel);
         }
 
+    }
+
+    @Override
+    public OrderLineDto getOrderLineById(Long id) {
+        Optional<OrderLineModel> foundOrderLineModel = orderLineRepository.findById(id);
+        if(foundOrderLineModel.isPresent()){
+            OrderLineModel orderLineModel = foundOrderLineModel.get();
+            OrderLineDto orderLineDto = new OrderLineDto();
+            orderLineDto.setId(orderLineModel.getId());
+            orderLineDto.setLinePrice(orderLineModel.getLinePrice());
+            orderLineDto.setQuantity(orderLineModel.getQuantity());
+            orderLineDto.setProductPrice(orderLineModel.getProductModel().getPrice());
+
+            ProductDto productDto = new ProductDto();
+            productDto.setId(orderLineModel.getProductModel().getId());
+            productDto.setProductName(orderLineModel.getProductModel().getProductName());
+                CategoryDto categoryDto = new CategoryDto();
+                categoryDto.setCategoryName(orderLineModel.getProductModel().getCategory().getCategoryName());
+                categoryDto.setId(orderLineModel.getProductModel().getCategory().getId());
+            productDto.setCategory(categoryDto);
+
+            orderLineDto.setProduct(productDto);
+            return orderLineDto;
+        }
+       return null;
     }
 }
