@@ -12,6 +12,8 @@ public class ProductDto {
 
     private double price;
 
+    // private String thumbnail;
+
     public long getId() {
         return id;
     }
@@ -43,4 +45,12 @@ public class ProductDto {
     public void setPrice(double price) {
         this.price = price;
     }
+
+//    public String getThumbnail() {
+//        return thumbnail;
+//    }
+//
+//    public void setThumbnail(String thumbnail) {
+//        this.thumbnail = thumbnail;
+//    }
 }

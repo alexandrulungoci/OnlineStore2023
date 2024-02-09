@@ -10,4 +10,6 @@ public interface OrderService {
 
     List<OrderDto> getOrdersByUserId(Long userId);
 
+    List<OrderDto> getOrders();
+
 }

@@ -17,11 +17,7 @@ public class CartController {
     @Autowired
     private CartService cartService;
 
-    @PutMapping("addToCart/{userId}/{productId}")
-    public ResponseEntity addToCart(@PathVariable("userId") Long userId, @PathVariable("productId") Long productId) {
-        cartService.addToCart(userId, productId);
-        return new ResponseEntity(HttpStatus.OK);
-    }
+
 
     @GetMapping("findByUserModel_Id/{userId}")
     public ResponseEntity<CartDto> findByUserModel_Id(@PathVariable("userId") Long userId) {

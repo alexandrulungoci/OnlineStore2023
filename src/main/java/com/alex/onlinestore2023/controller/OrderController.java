@@ -27,4 +27,10 @@ public class OrderController {
         List<OrderDto> orderDtoList = orderService.getOrdersByUserId(userId);
         return new ResponseEntity(orderDtoList, HttpStatus.OK);
     }
+
+    @GetMapping("getOrders")
+    public ResponseEntity<OrderDto> getOrders() {
+        List<OrderDto> orderDtoList = orderService.getOrders();
+        return new ResponseEntity(orderDtoList, HttpStatus.OK);
+    }
 }

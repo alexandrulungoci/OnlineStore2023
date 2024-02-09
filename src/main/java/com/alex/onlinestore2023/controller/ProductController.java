@@ -1,6 +1,8 @@
 package com.alex.onlinestore2023.controller;
 
+import com.alex.onlinestore2023.Model.ProductModel;
 import com.alex.onlinestore2023.dto.ProductDto;
+import com.alex.onlinestore2023.service.CartService;
 import com.alex.onlinestore2023.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +17,8 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
+    @Autowired
+    private CartService cartService;
 
     @PostMapping("addProduct")
     public ResponseEntity addProduct(@RequestBody ProductDto productDto) {
@@ -35,6 +39,14 @@ public class ProductController {
         return new ResponseEntity(productList, HttpStatus.OK);
     }
 
+    @GetMapping("getProductsByCategory/{id}")
+    public ResponseEntity<List<ProductDto>> getProductsByCategory(@PathVariable  Long id) {
+        List<ProductDto> productList = productService.getProductsByCategory(id);
+        return new ResponseEntity(productList, HttpStatus.OK);
+    }
+
+
+
     @PutMapping("updateProduct")
     public ResponseEntity updateProduct(@RequestBody ProductDto productDto) {
         productService.updateProduct(productDto);
@@ -47,5 +59,10 @@ public class ProductController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    @PutMapping("addToCart/{userId}/{productId}")
+    public ResponseEntity addToCart(@PathVariable("userId") Long userId, @PathVariable("productId") Long productId) {
+        cartService.addToCart(userId, productId);
+        return new ResponseEntity(HttpStatus.OK);
+    }
 
 }
